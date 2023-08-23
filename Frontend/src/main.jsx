@@ -3,6 +3,7 @@ import * as React from 'react'
 import Home from "././Home"
 import NewPage from "./NewLandingPage"
 import Contact from "./Contact"
+import Profile from "./Profile"
 
 
 const  MainRoutes = () => {
@@ -18,7 +19,7 @@ return useRoutes ([
 
 
 {
-    path: '/NewPage',
+    path: '/ShoppingCart',
     element: <NewPage/>
 },
 
@@ -28,6 +29,10 @@ return useRoutes ([
 },
 
 
+{
+    path: '/Profile',
+    element: <Profile/>
+},
 
 
 ])

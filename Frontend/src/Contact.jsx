@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { TextField, Button, Typography, Box } from "@mui/material";
+import { Container, Nav, Navbar } from 'react-bootstrap'; 
+import 'bootstrap/dist/css/bootstrap.css';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
 
 
 const TrueColor = styled.div`
@@ -19,6 +23,7 @@ const ContactContainer = styled.div`
    min-height: 150vh;
    overflow: hidden;
    color: white;
+  background-color: black;
 `;
 
 
@@ -40,7 +45,26 @@ export default function Contact() {
     <>
     
      <div className="app2">
-     
+     <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="/">Chibi Canvas</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/Profile">Profile</Nav.Link>
+            <Nav.Link href="/Contact">Contact</Nav.Link>
+
+            <Nav.Link href="/ShoppingCart">          <ShoppingCartIcon /> </Nav.Link>
+
+          
+          
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+
+
 <ContactContainer>
    
 <Box
@@ -49,6 +73,7 @@ export default function Contact() {
         color: 'white',
         maxWidth: '1000px', // Increase the max width of the component
         margin: '0 auto', 
+        
       }}
     >
       <Box sx={{ maxWidth: 900, mx: 'auto', p: 2 }}>

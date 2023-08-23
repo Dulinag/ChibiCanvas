@@ -18,6 +18,22 @@ import styled1 from 'styled-components';
 import image1 from './images/Sanji_and_Zeff_Cooking.webp'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import TextField from '@mui/material/TextField';
+import DialogActions from '@mui/material/DialogActions';
+import {useNavigate } from 'react-router-dom';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'; 
+
+
+import 'bootstrap/dist/css/bootstrap.css';
+
+
+
+
 
 
 
@@ -46,6 +62,16 @@ const Titler = styled1.div`
   
 `;
 
+const LoginSpace = styled1.div`
+text-align: center;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+  
+`;
+
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -59,13 +85,77 @@ const ExpandMore = styled((props) => {
 
 function Home() {
 
+  const navigate = useNavigate();
 
   const [expanded, setExpanded] = React.useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [isValidationError, setIsValidationError] = useState(false);
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+
+
+  const handleCreateAccountClick = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleCreateAccount = () => {
+    // Basic email and password validation
+    if (email && password && password.length >= 6) {
+      // Simulate account creation with a success message
+      alert('Account created successfully!');
+      setIsValidationError(false);
+      setIsDialogOpen(false);
+      navigate('/Profile');
+    } else {
+      setIsValidationError(true);
+    }
+  };
+  const handleLoginClick = () => {
+    setIsLoginDialogOpen(true);
+  };
+
+
+  const handleProfileClick = () => {
+if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
+  navigate('/Profile');
+
+}
+
+  };
+  const handleLoginDialogClose = () => {
+    setIsLoginDialogOpen(false);
+  };
+  const handleLogin = () => {
+    // Basic login validation logic
+    if (email && password) {
+      // Simulate successful login
+      alert('Logged in successfully!');
+      setIsValidationError(false);
+      setIsLoginDialogOpen(false);
+      navigate('/Profile');
+        } else {
+      setIsValidationError(true);
+    }
+  };
+
+
+const ProfileAvatar = styled(Avatar)(({ theme }) => ({
+  width: theme.spacing(12),
+  height: theme.spacing(12),
+  marginBottom: theme.spacing(2),
+}));
 
   return (
 
@@ -74,12 +164,120 @@ function Home() {
     <div className="App">
       <BigDiver>
 
+      <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="/">Chibi Canvas</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/Profile">Profile</Nav.Link>
+            <Nav.Link href="/Contact">Contact</Nav.Link>
+
+            <Nav.Link href="/ShoppingCart">          <ShoppingCartIcon /> </Nav.Link>
+            
+
+          
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+
 <Titler>
-<h1>
-        <h1>CHIBI CANVAS</h1>
-    
-    </h1>
+
+    <a onClick = {handleProfileClick}>
+    <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
+</a>
+
+
   </Titler>
+
+<LoginSpace>
+
+<Button variant="contained" color="primary" onClick={handleLoginClick}>
+            Log In
+          </Button>
+
+          <Button variant="contained" color="primary" onClick={handleCreateAccountClick}>
+            Create Account
+          </Button>
+
+
+          <Dialog open={isLoginDialogOpen} onClose={handleLoginDialogClose}>
+            <DialogTitle>Log In</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Please enter your email and password to log in.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={isValidationError}
+                helperText={isValidationError && 'Please enter a valid email'}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={isValidationError && password.length === 0}
+                helperText={isValidationError && password.length === 0 && 'Please enter your password'}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleLoginDialogClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleLogin} color="primary">
+                Log In
+              </Button>
+            </DialogActions>
+          </Dialog>
+        
+          </LoginSpace>
+          <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+            <DialogTitle>Create Account</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Please enter your email and password to create an account.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={isValidationError}
+                helperText={isValidationError && 'Please enter a valid email'}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={isValidationError && password.length < 6}
+                helperText={isValidationError && password.length < 6 && 'Password must be at least 6 characters'}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleCreateAccount} color="primary">
+                Create
+              </Button>
+            </DialogActions>
+          </Dialog>
+        
      
   <Card sx={{ maxWidth: 345 }}>
       <CardHeader
@@ -116,7 +314,7 @@ function Home() {
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        <IconButton aria-label="Add to cart" href="/NewPage">
+        <IconButton aria-label="Add to cart" href="/ShoppingCart">
           <ShoppingCartIcon />
         </IconButton>
         
