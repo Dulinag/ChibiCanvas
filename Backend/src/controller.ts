@@ -1,4 +1,4 @@
-import {pool} from "./db.js";
+import {pool} from "./db";
 import dotenv from 'dotenv';
 dotenv.config();
 import queries from "./queries";
@@ -76,8 +76,29 @@ function generateAccessToken(user: any)
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {expiresIn: '1h'});
 }
 
+const getArtworkByID = async (id: Number) =>
+{
+    const res = await pool.query(queries.getArtworkByID, [id]);
+    return res.rows;
+}
+
+const getFeatured = async (req: any, res: any) =>
+{
+    const featuredRes = await pool.query(queries.getFeatured);
+    let featuredResults = [];
+    for(let id = 0;id<featuredRes.rowCount;id++)
+    {
+        // console.log("ID we are giving is " + featuredRes.rows[id].product_id);
+        let oneRes = await getArtworkByID(featuredRes.rows[id].product_id);
+        featuredResults.push(oneRes);
+    }
+    return res.send(featuredResults);
+}
+
+
 export default {
     getArtworks,
     loginUser,
-    createAccount
+    createAccount,
+    getFeatured
 }
