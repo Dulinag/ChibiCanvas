@@ -34,6 +34,21 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 
+const CheckoutButton = styled1.button`
+  background-color: #f0c14b;
+  border: 1px solid #a88734;
+  border-radius: 3px;
+  color: #111;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: #ff9900;
+    border-color: #9c7e31;
+  }
+`;
 
 
 
@@ -194,15 +209,16 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 
   </Titler>
 
-<LoginSpace>
+<LoginSpace >
 
-<Button variant="contained" color="primary" onClick={handleLoginClick}>
+<CheckoutButton onClick={handleLoginClick}>   
             Log In
-          </Button>
+</CheckoutButton>
 
-          <Button variant="contained" color="primary" onClick={handleCreateAccountClick}>
+
+          <CheckoutButton onClick={handleCreateAccountClick}>
             Create Account
-          </Button>
+          </CheckoutButton>
 
 
           <Dialog open={isLoginDialogOpen} onClose={handleLoginDialogClose}>
