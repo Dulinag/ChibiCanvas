@@ -10,6 +10,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const controller_1 = __importDefault(require("./src/controller"));
 const app = (0, express_1.default)();
 const port = 3001;
+app.use(express_1.default.json());
 app.get("/", (req, res) => {
     res.send("Hello, welcome to the chibi canvas server!");
 });
@@ -27,4 +28,6 @@ function authenticateToken(req, res, next) {
     });
 }
 app.get("/artworks", controller_1.default.getArtworks);
+app.post("/createAccount", controller_1.default.createAccount);
+app.post("/login", controller_1.default.loginUser);
 app.listen(port, () => console.log(`app listening on port ${port}`));
