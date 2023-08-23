@@ -10,6 +10,8 @@ const app: Express  = express();
 
 const port: Number = 3001;
 
+app.use(express.json());
+
 app.get("/", (req, res)=>
 {
     res.send("Hello, welcome to the chibi canvas server!");
@@ -31,5 +33,7 @@ function authenticateToken(req: GetUserReq, res: Response, next: any){
   }
 
 app.get("/artworks", controller.getArtworks);
+app.post("/createAccount", controller.createAccount);
+app.post("/login", controller.loginUser);
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
