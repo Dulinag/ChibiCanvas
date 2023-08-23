@@ -24,7 +24,7 @@ import image2 from './images/Sanji_and_Zeff_Cooking.webp'
 
 const BigDiver = styled1.div`
   background-color: black;
-  padding-bottom: 40%;
+  padding-bottom: 20%;
   padding-top: 5%;
   color: white;
 `;
@@ -35,6 +35,11 @@ const Spacer = styled1.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+`;
+
+const Padder = styled1.div`
+ color: black;
+ padding-bottom: 25%;
 `;
 
 const Spacer1 = styled1.div`
@@ -71,6 +76,7 @@ function Profile() {
     const [editedSubheader, setEditedSubheader] = useState('');
     const [editedContent, setEditedContent] = useState('');
     const [editedImage, setEditedImage] = useState('');
+    const [editedPrice, setEditedPrice] = useState('');
 
   
     const handleToggleEdit = (index) => {
@@ -81,6 +87,7 @@ function Profile() {
         setEditedTitle(cards[index].title);
         setEditedSubheader(cards[index].subheader);
         setEditedContent(cards[index].content);
+        setEditedPrice(cards[index].price);
       }
     };
   
@@ -88,6 +95,8 @@ function Profile() {
         const updatedCards = [...cards];
         updatedCards[index].title = editedTitle;
         updatedCards[index].subheader = editedSubheader;
+        updatedCards[index].price = editedPrice;
+
         updatedCards[index].content = editedContent;
         updatedCards[index].image = editedImage; // Update the image URL
       
@@ -100,7 +109,8 @@ function Profile() {
         const newCard = {
           title: "Title",
           subheader: 'Date Made',
-          image: 'https://example.com/placeholder-image.jpg', // Use a placeholder image URL here
+          image: 'https://example.com/placeholder-image.jpg', // Use a placeholder image URL here,
+          price: '$--',
           content: 'This impressive paella is a perfect party dish and a fun meal to cook together with your guests...',
         };
       
@@ -142,11 +152,14 @@ Hello        </Typography>
         {/* Display more user information or relevant content */}
       </StyledPaper>
       <Spacer>
+        <br></br>
 <Card>
         <CardContent>
           <Button
             variant="outlined"
             color="primary"
+            href="#scrollToSection"
+
             startIcon={<AddIcon />}
             onClick={handleAddCard}
           >
@@ -156,8 +169,8 @@ Hello        </Typography>
       </Card>
       </Spacer>
     </Container>
-
-    <Spacer1>
+<Padder>h</Padder>
+    <Spacer1 id="scrollToSection">
     {cards.map((card, index) => (
   <Card key={index} sx={{ maxWidth: 345 }}>
     <CardHeader
@@ -181,6 +194,7 @@ Hello        </Typography>
           card.title
         )
       }
+ 
       subheader={
         editingIndex === index ? (
           <TextField
@@ -207,6 +221,17 @@ Hello        </Typography>
       />
     )}
     <CardContent>
+    <Typography variant="body2" color="text.secondary">
+        {editingIndex === index ? (
+          <TextField
+            multiline
+            value={editedPrice}
+            onChange={(e) => setEditedPrice(e.target.value)}
+          />
+        ) : (
+          card.price
+        )}
+      </Typography>
       <Typography variant="body2" color="text.secondary">
         {editingIndex === index ? (
           <TextField

@@ -59,7 +59,9 @@ const Titler = styled1.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+  padding-top: 1%;  
+  padding-bottom: 1%;  
+
 `;
 
 const LoginSpace = styled1.div`
@@ -329,10 +331,13 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>:</Typography>
+        <Typography paragraph>$5000</Typography>
+          <Typography paragraph>
+          </Typography>
           <Typography paragraph>
             Sanji/s tasy Paella
           </Typography>
+      
       
         </CardContent>
       </Collapse>
