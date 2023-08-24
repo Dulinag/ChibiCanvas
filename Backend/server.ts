@@ -6,11 +6,14 @@ import { GetUserReq } from "./src/types";
 import jwt from "jsonwebtoken";
 import controller from "./src/controller";
 
+const cors = require("cors");
+
 const app: Express  = express();
 
 const port: Number = 3001;
 
 app.use(express.json());
+app.use(cors()); 
 
 app.get("/", (req, res)=>
 {

@@ -27,6 +27,7 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import {useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'; 
+import axios from 'axios';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -127,18 +128,11 @@ function Home() {
     setIsDialogOpen(false);
   };
 
-  const handleCreateAccount = () => {
-    // Basic email and password validation
-    if (email && password && password.length >= 6) {
-      // Simulate account creation with a success message
-      alert('Account created successfully!');
-      setIsValidationError(false);
-      setIsDialogOpen(false);
-      navigate('/Profile');
-    } else {
-      setIsValidationError(true);
-    }
-  };
+
+  
+
+ 
+  
   const handleLoginClick = () => {
     setIsLoginDialogOpen(true);
   };
@@ -154,25 +148,89 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
   const handleLoginDialogClose = () => {
     setIsLoginDialogOpen(false);
   };
-  const handleLogin = () => {
-    // Basic login validation logic
+  const loginEndpoint = '/login';
+  const createAccountEndpoint = 'http://localhost:3001/createAccount';
+  
+
+  const handleLogin = async () => {
     if (email && password) {
-      // Simulate successful login
-      alert('Logged in successfully!');
-      setIsValidationError(false);
-      setIsLoginDialogOpen(false);
-      navigate('/Profile');
+      try {
+        const response = await fetch(loginEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: email, password }),
+        });
+  
+        if (response.ok) {
+          // Handle successful response, e.g., store authentication token or redirect
+          alert('Logged in successfully!');
+          setIsValidationError(false);
+          setIsLoginDialogOpen(false);
+          navigate('/Profile');
         } else {
+          // Handle error response, e.g., show error message
+          setIsValidationError(true);
+          console.error('Login failed:', response.statusText);
+        }
+      } catch (error) {
+        // Handle network errors
+        setIsValidationError(true);
+        console.error('Login failed:', error);
+      }
+    } else {
       setIsValidationError(true);
     }
   };
-
-
+  
+  const handleCreateAccount = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    console.log('email:', email); // Check the value of email
+    console.log('emailIsValid:', emailRegex.test(email));
+  
+    if (email && password && password.length >= 6 && emailRegex.test(email)) {
+      try {
+        const response = await fetch(createAccountEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: email, password }),
+        });
+  
+        if (response.ok) {
+          // Handle successful response, e.g., show success message or redirect
+          alert('Account created successfully!');
+          setIsValidationError(false);
+          setIsDialogOpen(false);
+          navigate('/Profile');
+        } else {
+          // Handle error response, e.g., show error message
+          setIsValidationError(true);
+          console.error('Account creation failed:', response.statusText);
+        }
+      } catch (error) {
+        // Handle network errors
+        setIsValidationError(true);
+        console.error('Account creation failed:', error);
+      }
+    } else {
+      setIsValidationError(true);
+    }
+  };
+  
+  
+  console.log(email);
+  console.log(password);
+  
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(12),
   height: theme.spacing(12),
   marginBottom: theme.spacing(2),
 }));
+
 
   return (
 

@@ -14,26 +14,26 @@ const getArtworks = (req: any, res:any) =>
         res.status(200).json(results.rows);
     });
 };
-
-const createAccount = async (req: any, res: any) =>
-{
-    console.log("req body is " + JSON.stringify(req.body));
+const createAccount = async (req: any, res: any) => {
+  console.log("req body is " + JSON.stringify(req.body));
   let username = req.body.username;
   let password = req.body.password;
-  const userExists =  await pool.query(queries.checkUserExists, [username]);
-  if(userExists.rowCount > 0)
-  {
+  
+  const userExists = await pool.query(queries.checkUserExists, [username]);
+
+  if (userExists.rowCount > 0) {
     console.log("username exists");
     res.status(404).send("username exists");
-  } else
-  {
-    const salt =  await bcrypt.genSalt()
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      await pool.query(queries.addUser, [`${username}`, `${hashedPassword}`]);
-      console.log("encrypted password and added to db");
-      res.status(201).send("encrypted password and added to db");
+  } else {
+    const saltRounds = 10; // You can adjust this value as needed
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt); // Using 'password' instead of 'req.body.password'
+    await pool.query(queries.addUser, [`${username}`, `${hashedPassword}`]);
+    console.log("encrypted password and added to db");
+    res.status(201).send("encrypted password and added to db");
   }
 }
+
 
 const loginUser = async (req: any, res: any) =>
 {
