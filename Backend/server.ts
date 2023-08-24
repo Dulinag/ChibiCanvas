@@ -36,5 +36,7 @@ app.get("/artworks", controller.getArtworks);
 app.post("/createAccount", controller.createAccount);
 app.post("/login", controller.loginUser);
 app.get("/featured", controller.getFeatured);
+app.post('/addToCart', authenticateToken as any, controller.addToCart);
+app.delete('/deleteFromCart', authenticateToken as any, controller.deleteFromCart);
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
