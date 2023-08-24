@@ -95,10 +95,53 @@ const getFeatured = async (req: any, res: any) =>
     return res.send(featuredResults);
 }
 
+const addToCart = async (req: any, res: any) =>
+{
+  let username = req.user.username;
+  let productID = req.body.product_id;
+  let quantity = req.body.quantity;
+
+  const userCart = await pool.query(queries.checkCart, [username, productID]);
+  console.log('userCart is ' + JSON.stringify(userCart.rows));
+    // need to add checks to see if the user is trying to add more than the quantity of the product the owner has
+    // need checks for if the user is trying to add an item to their cart that they own
+  pool.query(queries.addCart, [`${username}`, `${productID}`, `${quantity}`], (err: any, results: any)=>
+  {
+    if(err) throw err;
+    res.status(201).send("successfully added item to cart");
+  });
+}
+
+const deleteFromCart = async (req: any, res:any) =>
+{
+  let username = req.user.username;
+  let productID = req.body.product_id;
+  let quantity = req.body.quantity;
+
+  const userCart = await pool.query(queries.checkCart, [username, productID]);
+  if(userCart.rowCount == 0)
+  {
+    return res.status(403).send('item does not exist in cart');
+  }
+  // need to adds checks to see if we are trying to delete more than we have so we can warn the user.
+  // currently, we will delete the item from the cart if the user tries to delete more than they have
+  pool.query(queries.updateCart, [`${username}`, `${productID}`, `${quantity}`], (err: any, results:any)=>{
+    if(err) throw err;
+    res.status(201).send("successfully removed item to cart");
+  })
+
+  const numCart = await pool.query(queries.checkQuantityCart,[`${username}`, `${productID}`] );
+  if(numCart.rows[0].quantity < 0)
+  {
+    await pool.query(queries.deleteFromCart, [`${username}`, `${productID}`]);
+  }
+}
 
 export default {
     getArtworks,
     loginUser,
     createAccount,
-    getFeatured
+    getFeatured,
+    addToCart,
+    deleteFromCart
 }
