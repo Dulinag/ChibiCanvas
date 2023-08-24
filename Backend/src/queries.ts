@@ -8,6 +8,8 @@ const addCart = 'UPDATE CART SET quantity = quantity + $3 WHERE product_id = $2 
 const updateCart = 'UPDATE CART SET quantity = quantity - $3 WHERE product_id = $2 AND username = $1;';
 const checkQuantityCart = 'SELECT quantity FROM CART WHERE username=$1 AND product_id=$2;';
 const deleteFromCart = 'DELETE FROM CART WHERE username=$1 AND product_id=$2';
+const searchQuery = "SELECT * from ARTWORKS where $1 = ANY(category);";
+
 
 export default {
     getArtworks,
@@ -19,5 +21,6 @@ export default {
     checkCart,
     updateCart,
     checkQuantityCart,
-    deleteFromCart
+    deleteFromCart,
+    searchQuery
 }
