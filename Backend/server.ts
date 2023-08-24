@@ -33,6 +33,7 @@ function authenticateToken(req: GetUserReq, res: Response, next: any){
   }
 
 app.get("/artworks", controller.getArtworks);
+app.get("/artwork", controller.getArtwork);
 app.post("/createAccount", controller.createAccount);
 app.post("/login", controller.loginUser);
 app.get("/featured", controller.getFeatured);

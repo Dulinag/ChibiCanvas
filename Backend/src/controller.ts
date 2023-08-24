@@ -82,6 +82,12 @@ const getArtworkByID = async (id: Number) =>
     return res.rows;
 }
 
+const getArtwork = async (req:any, res:any) =>
+{
+    const results = await getArtworkByID(req.body.product_id);
+    return res.send(results);
+}
+
 const getFeatured = async (req: any, res: any) =>
 {
     const featuredRes = await pool.query(queries.getFeatured);
@@ -143,5 +149,6 @@ export default {
     createAccount,
     getFeatured,
     addToCart,
-    deleteFromCart
+    deleteFromCart,
+    getArtwork
 }
