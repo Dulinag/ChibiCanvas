@@ -143,6 +143,17 @@ const deleteFromCart = async (req: any, res:any) =>
   }
 }
 
+const getArtworkSearch = async (req: any, res:any ) =>
+{
+  let searchQuery = req.params.searchQ;
+  const results = await pool.query(queries.searchQuery, [`${searchQuery}`]);
+    // can be improved such as 
+    // it only works with searching something like "Nature" or "Urban" which gets the respective item(s) for each. but when combined as "Nature Urban", we wont get any search results
+  console.log("results are " + JSON.stringify(results.rows));
+  // res.status(201).send("successfully searched for " + searchQuery);
+  res.status(201).send(results.rows);
+}
+
 export default {
     getArtworks,
     loginUser,
@@ -150,5 +161,6 @@ export default {
     getFeatured,
     addToCart,
     deleteFromCart,
-    getArtwork
+    getArtwork,
+    getArtworkSearch
 }
