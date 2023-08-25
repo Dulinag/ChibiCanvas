@@ -31,6 +31,7 @@ import axios from 'axios';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
+import ArtworkCard from './ArtworkCard';
 
 
 
@@ -148,7 +149,7 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
   const handleLoginDialogClose = () => {
     setIsLoginDialogOpen(false);
   };
-  const loginEndpoint = '/login';
+  const loginEndpoint = 'http://localhost:3001/login';
   const createAccountEndpoint = 'http://localhost:3001/createAccount';
   
 
@@ -355,67 +356,8 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
           </Dialog>
         
      
-  <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Sanji's Paella"
-        subheader="September 14, 2016"
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image={image1}
-        alt="Sanji's Paella"
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton aria-label="Add to cart" href="/ShoppingCart">
-          <ShoppingCartIcon />
-        </IconButton>
-        
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-        <Typography paragraph>$5000</Typography>
-          <Typography paragraph>
-          </Typography>
-          <Typography paragraph>
-            Sanji/s tasy Paella
-          </Typography>
-      
-      
-        </CardContent>
-      </Collapse>
-    </Card>
+<ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
+    
     </BigDiver>
     </div>
     </>
