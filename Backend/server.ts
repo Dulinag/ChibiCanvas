@@ -46,5 +46,6 @@ app.get("/search/:searchQ", controller.getArtworkSearch);
 app.post("/addArtwork", authenticateToken as any, controller.addArtwork);
 app.post("/deleteArtwork", authenticateToken as any, controller.deleteArtwork);
 app.get("/cart", authenticateToken as any, controller.getCart);
+app.get("/getArtworksByUser", authenticateToken as any, controller.getArtworkUser);
 
 app.listen(port, () => console.log(`app listening on port ${port}`));

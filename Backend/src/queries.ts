@@ -13,6 +13,7 @@ const searchQuery = "SELECT * from ARTWORKS where $1 = ANY(category);";
 const addArtwork = "INSERT INTO ARTWORKS(title, price, description, imgurl, date_created, ownername, artist_name, quantity) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6, $7);"
 const deleteArtwork = "DELETE FROM ARTWORKS WHERE ownername=$1 and product_id=$2";
 const getCartQuery = "SELECT * FROM CART WHERE username =$1";
+const getArtworkByUser = "SELECT * FROM ARTWORKS WHERE ownername=$1"
 
 export default {
     getArtworks,
@@ -29,5 +30,6 @@ export default {
     addArtwork,
     deleteArtwork,
     getCartQuery,
-    getArtworkCartbyID
+    getArtworkCartbyID,
+    getArtworkByUser
 }

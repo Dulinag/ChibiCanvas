@@ -208,6 +208,13 @@ const getCart = async (req: any, res: any) =>
 
 }
 
+const getArtworkUser = async(req: any, res: any)=>
+{
+    let username = req.user.username;
+    const artworks = await pool.query(queries.getArtworkByUser, [username]);
+    return res.json(artworks.rows);
+}
+
 
 export default {
     getArtworks,
@@ -220,5 +227,6 @@ export default {
     getArtworkSearch,
     addArtwork,
     deleteArtwork,
-    getCart
+    getCart,
+    getArtworkUser
 }
