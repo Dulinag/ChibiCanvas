@@ -31,6 +31,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Paper } from '@mui/material';
 
 import axios from 'axios';
+import NormalCard from './Normalcard'
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -393,21 +394,29 @@ useEffect(() => {
             </DialogActions>
           </Dialog>
         
-    <ul className='flexcontainer' >
-<ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
-{artworks? artworks.map((data, index) => {
-          return (
-            <ArtworkCard
-              imgURL={data.imgurl}
-              title={data.title}
-              price={data.price}
-              key={index}
-              description={data.description}
-              date={data.date_created}
-            />
-          );
-        }): null}
-        </ul>
+          <ul className='flexcontainer'>
+  <NormalCard
+    card={{
+      title: "Paella",
+      price: "$50",
+      date: "Aug 2023",
+      imgURL: "https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg",
+      description: "This is an impressive paella"
+    }}
+  />
+  {artworks.map((data, index) => (
+    <NormalCard
+      key={index}
+      card={{
+        title: data.title,
+        price: data.price,
+        date: data.date_created,
+        imgURL: data.imgurl,
+        description: data.description
+      }}
+    />
+  ))}
+</ul>
     </BigDiver>
     </div>
     </>

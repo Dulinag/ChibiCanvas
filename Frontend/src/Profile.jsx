@@ -13,11 +13,6 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save'; // Import the SaveIcon component
 import { red } from '@mui/material/colors';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import image3 from "./images/edit.png"
-
 import {
 
     CardHeader,
@@ -25,12 +20,11 @@ import {
     IconButton,
     TextField,
   } from '@mui/material';
-
 import image2 from './images/Sanji_and_Zeff_Cooking.webp'
 import ProfileArtworks from './ProfileArtworks';
 import axios from "axios";
 import ArtworkCard from './ArtworkCard';
-
+import image3 from "./images/edit.png"
 
 const BigDiver = styled1.div`
   background-color: black;
@@ -64,27 +58,6 @@ border: 1px solid black;
 height: 600px;
 `;
 
-const ScrollToTopButton = styled1.button`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: gray;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 50%; /* Make it circular */
-  transition: background-color 0.3s, transform 0.3s;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  &.active {
-    transform: scale(1.1);
-  }
-`;
-
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -102,6 +75,13 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 function Profile() {
   const [artworks, setArtworks] = useState([]);
   const [subTotal, setsubTotal] = useState(0);
+
+  const handleRemoveCard = (index) => {
+    const updatedCards = [...cards];
+    updatedCards.splice(index, 1);
+    setCards(updatedCards);
+  };
+  
 
   // useEffect(()=>
   // {
@@ -157,30 +137,6 @@ function Profile() {
         setEditedPrice(cards[index].price);
       }
     };
-
-    const [showScrollButton, setShowScrollButton] = useState(false);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 200) {
-        setShowScrollButton(true);
-      } else {
-        setShowScrollButton(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
   
     const handleSaveCard = (index) => {
         const updatedCards = [...cards];
@@ -195,24 +151,18 @@ function Profile() {
         setEditingIndex(null);
       };
       
-      const handleRemoveCard = (index) => {
-        const updatedCards = [...cards];
-        updatedCards.splice(index, 1);
-        setCards(updatedCards);
-      };
-      
-    const handleAddCard = () => {
+
+      const handleAddCard = () => {
         const newCard = {
           title: "Title",
           subheader: 'Date Made',
-          image: image3, // Use a placeholder image URL here,
+          image: image3, // Use the imported image URL here
           price: '$--',
           content: 'This impressive paella is a perfect party dish and a fun meal to cook together with your guests...',
         };
       
         setCards([...cards, newCard]);
       };
-
   const handleEditCard = (index) => {
     setEditingIndex(index);
   };
@@ -246,7 +196,6 @@ function Profile() {
   </Navbar>
   <BigDiver>
     <Container maxWidth="sm">
-
       <StyledPaper elevation={3}>
         <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
         <Typography variant="h4" component="h1" gutterBottom>
@@ -256,58 +205,58 @@ function Profile() {
 Hello        </Typography>
         {/* Display more user information or relevant content */}
       </StyledPaper>
-
       <Spacer>
         
         <br></br>
-<Card>
-        <CardContent>
-          <Button
-            variant="outlined"
-            color="primary"
-            href="#scrollToSection"
-
-            startIcon={<AddIcon />}
-            onClick={handleAddCard}
-          >
-            Add Art
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            href="#scrollToSection"
-
-            startIcon={<AddIcon />}
-            onClick={getartworks}
-          >
-            Load art
-          </Button>
-        </CardContent>
-      </Card>
-      </Spacer>
-    </Container>
-
-{/* <Padder>h</Padder> */}
-<ul className='flexcontainer' >
-<ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
-{artworks? artworks.map((data, index) => {
-          return (
-            <ArtworkCard
-              imgURL={data.imgurl}
-              title={data.title}
-              price={data.price}
-              key={index}
-              description={data.description}
-              date={data.date_created}
-            />
-          );
-        }): null}
-        </ul>
-
-
-
-
-    </BigDiver>
+        <Card>
+          <CardContent>
+            <Button
+              variant="outlined"
+              color="primary"
+              href="#scrollToSection"
+              startIcon={<AddIcon />}
+              onClick={handleAddCard}
+            >
+              Add Art
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              href="#scrollToSection"
+              startIcon={<AddIcon />}
+              onClick={getartworks}
+            >
+              Load art
+            </Button>
+          </CardContent>
+        </Card>
+        </Spacer>
+      </Container>
+      <Padder>h</Padder>
+      <Spacer1 id="scrollToSection">
+        {cards.map((card, index) => (
+          <ArtworkCard
+            key={index}
+            card={card} // Pass the card object to the ArtworkCard component
+            index={index}
+            editingIndex={editingIndex}
+            editedImage={editedImage}
+            editedTitle={editedTitle}
+            editedSubheader={editedSubheader}
+            editedPrice={editedPrice}
+            editedContent={editedContent}
+            handleToggleEdit={handleToggleEdit}
+            handleSaveCard={handleSaveCard}
+            handleRemoveCard={handleRemoveCard}
+            setEditedImage={setEditedImage}
+            setEditedTitle={setEditedTitle}
+            setEditedSubheader={setEditedSubheader}
+            setEditedPrice={setEditedPrice}
+            setEditedContent={setEditedContent}
+          />
+        ))}
+      </Spacer1>
+      </BigDiver>
     
     </>
   );
