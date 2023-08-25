@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styled from 'styled-components';
+import ArtworkCard from './ArtworkCard';
+import axios from 'axios';
 
 const BigDiver = styled.div`
   background-color: black;
@@ -33,13 +35,49 @@ const CheckoutButton = styled.button`
 `;
 
 function CartPage() {
-  const cartItems = [
-    { id: 1, name: 'Product 1', price: 10.99 },
-    { id: 2, name: 'Product 2', price: 19.99 },
-    { id: 3, name: 'Product 3', price: 7.99 },
-  ];
+  const [Artworks, setArtworks] = useState([]);
+  const [subTotal, setsubTotal] = useState(0);
+  useEffect(() => {
+    let ignore = false;
 
-  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+    if (!ignore) getArtworks();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+  useEffect(()=>
+  {
+    let total=0;
+    console.log("Artworks are " + JSON.stringify(Artworks));
+    for(let i=0;i<Artworks.length;i++)
+    {
+      total += parseFloat(Artworks[i].price);
+    }
+    setsubTotal(total);
+  }, [Artworks]);
+  function getArtworks() {
+    axios
+      .get("http://localhost:3001/cart", {
+        headers:
+        {
+          Authorization: localStorage.getItem('accessToken')
+        }
+      })
+      .then((response) => {
+        console.log("Responses are " + JSON.stringify(response.data));
+        setArtworks(response.data);
+        
+        console.log("we just set artworks and they are now " + JSON.stringify(Artworks));
+        // window.location.reload(false);
+
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("error" + err);
+        }
+      });
+  }
 
   return (
     <>
@@ -62,13 +100,29 @@ function CartPage() {
       <BigDiver>
         <Container>
           <h1>Your Cart</h1>
-          {cartItems.map((item) => (
+          {/* {cartItems.map((item) => (
             <CartItem key={item.id}>
               <h3>{item.name}</h3>
               <p>${item.price.toFixed(2)}</p>
             </CartItem>
-          ))}
-          <p>Total: ${total.toFixed(2)}</p>
+          ))} */}
+          {/* <ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/> */}
+          <ul className='flexcontainer' >
+
+          {Artworks? Artworks.map((data, index) => {
+          return (
+            <ArtworkCard
+              imgURL={data.imgurl}
+              title={data.title}
+              price={data.price}
+              key={index}
+              description={data.description}
+              date={data.date_created}
+            />
+          );
+        }): null}
+        </ul>
+          <p>Total: ${subTotal}</p>
           <CheckoutButton>Proceed to Checkout</CheckoutButton>
         </Container>
       </BigDiver>
