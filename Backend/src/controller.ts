@@ -109,6 +109,11 @@ const addToCart = async (req: any, res: any) =>
 
   const userCart = await pool.query(queries.checkCart, [username, productID]);
   console.log('userCart is ' + JSON.stringify(userCart.rows));
+  if(userCart.rowCount > 0)
+  {
+    pool.query(queries.updateCart,  [`${username}`, `${productID}`, `${quantity}`]);
+    return res.status(201).send("Successfully updated quantity in cart");
+  }
     // need to add checks to see if the user is trying to add more than the quantity of the product the owner has
     // need checks for if the user is trying to add an item to their cart that they own
   pool.query(queries.addCart, [`${username}`, `${productID}`, `${quantity}`], (err: any, results: any)=>
@@ -122,7 +127,7 @@ const deleteFromCart = async (req: any, res:any) =>
 {
   let username = req.user.username;
   let productID = req.body.product_id;
-  let quantity = req.body.quantity;
+  let quantity = -1* req.body.quantity;
 
   const userCart = await pool.query(queries.checkCart, [username, productID]);
   if(userCart.rowCount == 0)
@@ -188,6 +193,21 @@ const deleteArtwork = async (req: any, res:any) =>
         return res.status(404).send(err);
     })
 }
+const getCart = async (req: any, res: any) =>
+{
+  let username = req.user.username;
+  const results = await pool.query(queries.getCartQuery, [username]);
+  let artworkArr = [];
+  for(let product_id = 0;product_id<results.rowCount;product_id++)
+  {
+    let result = await pool.query(queries.getArtworkCartbyID, [username, results.rows[product_id].product_id]);
+    artworkArr.push(result.rows[0])
+  }
+  console.log("artworkArr" + JSON.stringify(artworkArr));
+  res.json(artworkArr);
+
+}
+
 
 export default {
     getArtworks,
@@ -199,5 +219,6 @@ export default {
     getArtwork,
     getArtworkSearch,
     addArtwork,
-    deleteArtwork
+    deleteArtwork,
+    getCart
 }
