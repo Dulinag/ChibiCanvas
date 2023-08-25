@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Paper, Avatar } from '@mui/material';
 import { Card, CardActions, CardContent, Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -13,6 +13,11 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save'; // Import the SaveIcon component
 import { red } from '@mui/material/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+
 import {
 
     CardHeader,
@@ -20,7 +25,8 @@ import {
     IconButton,
     TextField,
   } from '@mui/material';
-import image2 from './images/Sanji_and_Zeff_Cooking.webp'
+import image2 from './images/Sanji_and_Zeff_Cooking.webp';
+import image3 from "./images/edit.png"
 
 const BigDiver = styled1.div`
   background-color: black;
@@ -52,6 +58,27 @@ flex-wrap: wrap;
 overflow-y: scroll;
 border: 1px solid black;
 height: 600px;
+`;
+
+const ScrollToTopButton = styled1.button`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%; /* Make it circular */
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &.active {
+    transform: scale(1.1);
+  }
 `;
 
 
@@ -90,6 +117,30 @@ function Profile() {
         setEditedPrice(cards[index].price);
       }
     };
+
+    const [showScrollButton, setShowScrollButton] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowScrollButton(true);
+      } else {
+        setShowScrollButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   
     const handleSaveCard = (index) => {
         const updatedCards = [...cards];
@@ -104,12 +155,17 @@ function Profile() {
         setEditingIndex(null);
       };
       
-
+      const handleRemoveCard = (index) => {
+        const updatedCards = [...cards];
+        updatedCards.splice(index, 1);
+        setCards(updatedCards);
+      };
+      
     const handleAddCard = () => {
         const newCard = {
           title: "Title",
           subheader: 'Date Made',
-          image: 'https://example.com/placeholder-image.jpg', // Use a placeholder image URL here,
+          image: image3, // Use a placeholder image URL here,
           price: '$--',
           content: 'This impressive paella is a perfect party dish and a fun meal to cook together with your guests...',
         };
@@ -142,15 +198,14 @@ function Profile() {
   </Navbar>
   <BigDiver>
     <Container maxWidth="sm">
-      <StyledPaper elevation={3}>
-        <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
-        <Typography variant="h4" component="h1" gutterBottom>
-          Welcome to Your Profile
-        </Typography>
-        <Typography variant="body1">
-Hello        </Typography>
-        {/* Display more user information or relevant content */}
-      </StyledPaper>
+    <StyledPaper elevation={3}>
+      <AccountCircleIcon sx={{ width: 120, height: 120, marginBottom: 2 }} />
+      <Typography variant="h4" component="h1" gutterBottom>
+        Welcome to Your Profile
+      </Typography>
+      <Typography variant="body1">Hello</Typography>
+      {/* Display more user information or relevant content */}
+    </StyledPaper>
       <Spacer>
         
         <br></br>
@@ -177,7 +232,7 @@ Hello        </Typography>
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-          R
+         <AccountCircleIcon/>
         </Avatar>
       }
       action={
@@ -252,9 +307,10 @@ Hello        </Typography>
       <IconButton aria-label="share">
         <ShareIcon />
       </IconButton>
-      <IconButton aria-label="Add to cart" href="/ShoppingCart">
-        {/* Add your cart icon */}
+       <IconButton aria-label="remove" onClick={() => handleRemoveCard(index)}>
+        <DeleteIcon />
       </IconButton>
+    
       <Button
         variant="outlined"
         color="primary"
@@ -271,7 +327,12 @@ Hello        </Typography>
   </Card>
 ))}
 
-
+<ScrollToTopButton
+        className={showScrollButton ? 'active' : ''}
+        onClick={scrollToTop}
+      >
+          <ArrowUpwardIcon />
+      </ScrollToTopButton>
 
 
 
