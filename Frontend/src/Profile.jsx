@@ -225,7 +225,7 @@ function Profile() {
       </Card>
       </Spacer>
     </Container>
-<Padder>h</Padder>
+  <Padder>h</Padder>
     <Spacer1 id="scrollToSection">
     {cards.map((card, index) => (
   <Card key={index} sx={{ maxWidth: 345 }}>
