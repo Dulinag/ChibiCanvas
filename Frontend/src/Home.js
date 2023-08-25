@@ -182,6 +182,18 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
         if (response.ok) {
           // Handle successful response, e.g., store authentication token or redirect
           alert('Logged in successfully!');
+
+          response.json().then((data)=>{
+            console.log("data from response json is " + JSON.stringify(data.accessToken));
+            localStorage.setItem('accessToken', JSON.stringify(data.accessToken));
+            localStorage.setItem('username', JSON.stringify(email));
+          })
+          // console.log("response json is " + JSON.stringify(response));
+          // localStorage.setItem('accessToken', JSON.stringify(.data));
+          // localStorage.setItem('username', JSON.stringify(email));
+          // console.log("We logged in an the access token is " + localStorage.getItem('accessToken'))
+          // console.log("We logged in an the username is " + localStorage.getItem('username'))
+
           setIsValidationError(false);
           setIsLoginDialogOpen(false);
           navigate('/Profile');
@@ -388,6 +400,7 @@ useEffect(() => {
               price={data.price}
               key={index}
               description={data.description}
+              date={data.date_created}
             />
           );
         }): null}
