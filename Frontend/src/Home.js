@@ -27,6 +27,9 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import {useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'; 
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Paper } from '@mui/material';
+
 import axios from 'axios';
 
 
@@ -169,12 +172,14 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
   
 
   const handleLogin = async () => {
+
     await axios.post("http://localhost:3001/login", {username: email, password:password}).then((response)=>
     {
       if(response.data.accessToken === undefined)
       {
         localStorage.setItem('accessToken', 'null');
         localStorage.setItem('username', JSON.stringify('Guest'));
+
         }
       else
       {
@@ -235,6 +240,13 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
   
   console.log(email);
   console.log(password);
+
+  const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }));
   
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(12),
@@ -280,7 +292,11 @@ useEffect(() => {
 <Titler>
 
     <a onClick = {handleProfileClick}>
-    <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
+   
+      <AccountCircleIcon sx={{ width: 120, height: 120, marginBottom: 2 }} />
+      
+ 
+
 </a>
 
 
