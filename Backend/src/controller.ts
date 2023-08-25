@@ -200,7 +200,7 @@ const getCart = async (req: any, res: any) =>
   let artworkArr = [];
   for(let product_id = 0;product_id<results.rowCount;product_id++)
   {
-    let result = await pool.query(queries.getArtworkCartbyID, [username, results.rows[product_id].product_id]);
+    let result = await pool.query(queries.getArtworkByID, [results.rows[product_id].product_id]);
     artworkArr.push(result.rows[0])
   }
   console.log("artworkArr" + JSON.stringify(artworkArr));
