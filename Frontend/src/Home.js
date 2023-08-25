@@ -188,7 +188,11 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
         // navigate("/");
   
       }
-      console.log("response is " + JSON.stringify(response.data))
+      console.log("response is " + JSON.stringify(response.data));
+      alert('Logged in successfully!');
+      setIsValidationError(false);
+      setIsLoginDialogOpen(false); 
+      navigate("/profile");
     }).catch((err) => {
       if (err) {
         console.log("error" + err);
