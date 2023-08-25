@@ -33,14 +33,20 @@ export default function Contact() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     useEffect(() => {
-        // Scroll to the top of the page when the component mounts
-        window.scrollTo(0, 0);
-      }, []);
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        //
-      };
+      // Scroll to the top of the page when the component mounts
+      window.scrollTo(0, 0);
+    }, []);
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      // Perform your form submission logic here
+  
+      // After submission, clear the form fields
+      setName("");
+      setEmail("");
+      setMessage("");
+    };
+  
     return (
     <>
     
@@ -65,85 +71,107 @@ export default function Contact() {
     </Navbar>
 
 
-<ContactContainer>
    
-<Box
-      sx={{
-        height: '150vh',
-        color: 'white',
-        maxWidth: '1000px', // Increase the max width of the component
-        margin: '0 auto', 
-        
-      }}
-    >
-      <Box sx={{ maxWidth: 900, mx: 'auto', p: 2 }}>
-        <Typography variant="h4" align="center" mb={2}>
-          Contact Us
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            margin="normal"
-            required
-            InputProps={{
-              style: {
-                color: 'white', // Set the font color to white
-              },
-            }}
-            InputLabelProps={{
-              style: {
-                color: 'white', // Set the label color to white
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            margin="normal"
-            required
-            type="email"
-            InputProps={{
-              style: {
-                color: 'white', // Set the font color to white
-              },
-            }}
-            InputLabelProps={{
-              style: {
-                color: 'white', // Set the label color to white
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            label="Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            margin="normal"
-            required
-            multiline
-            rows={4}
-            InputProps={{
-              style: {
-                color: 'white', // Set the font color to white
-              },
-            }}
-            InputLabelProps={{
-              style: {
-                color: 'white', // Set the label color to white
-              },
-            }}
-          />
-          <Button variant="contained" type="submit" sx={{ mt: 2 }}>
-            Submit
-          </Button>
-        </form>
-      </Box>
-    </Box>
+
+          <ContactContainer>
+        <Box
+          sx={{
+           
+            height: '150vh',
+            color: 'black',
+            maxWidth: '1000px', // Increase the max width of the component
+            margin: '0 auto',
+
+          }}
+        >
+          <Box sx={{ maxWidth: 900, mx: 'auto', p: 2 }}>
+            <Typography variant="h4" align="center" mb={2} style={{ color: 'white' }}>
+              Contact Us
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                margin="normal"
+                required
+                InputProps={{
+                  style: {
+                    color: 'white', // Set the font color to white
+                    backgroundColor: 'gray'
+
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'white', // Set the label color to white
+                    backgroundColor: 'gray',
+
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin="normal"
+                required
+                type="email"
+                InputProps={{
+                  style: {
+                    color: 'white', // Set the font color to white
+                    backgroundColor: 'gray'
+
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'white', // Set the label color to white
+                    backgroundColor: 'gray'
+
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                label="Message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                margin="normal"
+                required
+                multiline
+                rows={4}
+                InputProps={{
+                  style: {
+                    color: 'white', // Set the font color to white
+                    backgroundColor: 'gray'
+
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'white', // Set the label color to white
+                    backgroundColor: 'gray'
+
+                  },
+                }}
+              />
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{
+                  mt: 2,
+                  color: 'black', // Set button text color to black
+                  backgroundColor: 'white', // Set button background color to white
+                }}
+              >
+                Submit
+              </Button>
+            </form>
+          </Box>
+        </Box>
       </ContactContainer>
       
 
