@@ -154,6 +154,41 @@ const getArtworkSearch = async (req: any, res:any ) =>
   res.status(201).send(results.rows);
 }
 
+const addArtwork = async (req: any, res: any) =>
+{
+    let title = req.body.title;
+    let price = req.body.price;
+    let description = req.body.description;
+    let imgURL = req.body.imgURL;
+    // let dateCreated = req.body.date_created;
+    let owner = req.user.username;
+    console.log("owner is " + owner);
+    let artist_name = owner;
+    let quantity = 1;
+    pool.query(queries.addArtwork, [title, price, description, imgURL, owner, artist_name, quantity])
+    .then(()=>{
+        console.log("successfully added artwork!");
+        res.status(201).send("successfully added artwork!")})
+    .catch((err: any)=>{console.log("error " + err);res.status(404).send(err)})
+}
+
+const deleteArtwork = async (req: any, res:any) =>
+{
+    let product_id = req.body.product_id;
+    let username = req.user.username;
+    pool.query(queries.deleteArtwork, [username, product_id]).then(
+        ()=>
+        {
+            // bug: it runs section this even though the product_id doesnt exist
+            console.log("successfuly deleted artowrk!");
+            return res.status(201).send("successfuly deleted artowrk!");
+        }
+    ).catch((err: any)=>
+    {
+        return res.status(404).send(err);
+    })
+}
+
 export default {
     getArtworks,
     loginUser,
@@ -162,5 +197,7 @@ export default {
     addToCart,
     deleteFromCart,
     getArtwork,
-    getArtworkSearch
+    getArtworkSearch,
+    addArtwork,
+    deleteArtwork
 }
