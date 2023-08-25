@@ -27,6 +27,9 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import {useNavigate } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'; 
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Paper } from '@mui/material';
+
 import axios from 'axios';
 
 
@@ -182,6 +185,18 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
         if (response.ok) {
           // Handle successful response, e.g., store authentication token or redirect
           alert('Logged in successfully!');
+
+          response.json().then((data)=>{
+            console.log("data from response json is " + JSON.stringify(data.accessToken));
+            localStorage.setItem('accessToken', JSON.stringify(data.accessToken));
+            localStorage.setItem('username', JSON.stringify(email));
+          })
+          // console.log("response json is " + JSON.stringify(response));
+          // localStorage.setItem('accessToken', JSON.stringify(.data));
+          // localStorage.setItem('username', JSON.stringify(email));
+          // console.log("We logged in an the access token is " + localStorage.getItem('accessToken'))
+          // console.log("We logged in an the username is " + localStorage.getItem('username'))
+
           setIsValidationError(false);
           setIsLoginDialogOpen(false);
           navigate('/Profile');
@@ -240,6 +255,13 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
   
   console.log(email);
   console.log(password);
+
+  const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }));
   
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(12),
@@ -285,7 +307,11 @@ useEffect(() => {
 <Titler>
 
     <a onClick = {handleProfileClick}>
-    <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
+   
+      <AccountCircleIcon sx={{ width: 120, height: 120, marginBottom: 2 }} />
+      
+ 
+
 </a>
 
 
@@ -388,6 +414,7 @@ useEffect(() => {
               price={data.price}
               key={index}
               description={data.description}
+              date={data.date_created}
             />
           );
         }): null}
