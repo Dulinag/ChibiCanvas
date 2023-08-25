@@ -169,47 +169,30 @@ if(setIsValidationError(false) && setIsLoginDialogOpen(false)){
   
 
   const handleLogin = async () => {
-    if (email && password) {
-      try {
-        const response = await fetch(loginEndpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username: email, password }),
-        });
-  
-        if (response.ok) {
-          // Handle successful response, e.g., store authentication token or redirect
-          alert('Logged in successfully!');
-
-          response.json().then((data)=>{
-            console.log("data from response json is " + JSON.stringify(data.accessToken));
-            localStorage.setItem('accessToken', JSON.stringify(data.accessToken));
-            localStorage.setItem('username', JSON.stringify(email));
-          })
-          // console.log("response json is " + JSON.stringify(response));
-          // localStorage.setItem('accessToken', JSON.stringify(.data));
-          // localStorage.setItem('username', JSON.stringify(email));
-          // console.log("We logged in an the access token is " + localStorage.getItem('accessToken'))
-          // console.log("We logged in an the username is " + localStorage.getItem('username'))
-
-          setIsValidationError(false);
-          setIsLoginDialogOpen(false);
-          navigate('/Profile');
-        } else {
-          // Handle error response, e.g., show error message
-          setIsValidationError(true);
-          console.error('Login failed:', response.statusText);
+    await axios.post("http://localhost:3001/login", {username: email, password:password}).then((response)=>
+    {
+      if(response.data.accessToken === undefined)
+      {
+        localStorage.setItem('accessToken', 'null');
+        localStorage.setItem('username', JSON.stringify('Guest'));
         }
-      } catch (error) {
-        // Handle network errors
-        setIsValidationError(true);
-        console.error('Login failed:', error);
+      else
+      {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('username', JSON.stringify(email));
+        // navigate("/");
+  
       }
-    } else {
-      setIsValidationError(true);
-    }
+      console.log("response is " + JSON.stringify(response.data))
+    }).catch((err) => {
+      if (err) {
+        console.log("error" + err);
+      }
+    });
+    console.log('localstorage auth is ' + localStorage.getItem('accessToken'));
+    // window.location.reload(false);
+    
+      
   };
   
   const handleCreateAccount = async () => {
