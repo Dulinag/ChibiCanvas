@@ -25,8 +25,12 @@ import {
     IconButton,
     TextField,
   } from '@mui/material';
-import image2 from './images/Sanji_and_Zeff_Cooking.webp';
-import image3 from "./images/edit.png"
+
+import image2 from './images/Sanji_and_Zeff_Cooking.webp'
+import ProfileArtworks from './ProfileArtworks';
+import axios from "axios";
+import ArtworkCard from './ArtworkCard';
+
 
 const BigDiver = styled1.div`
   background-color: black;
@@ -96,6 +100,42 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 function Profile() {
+  const [artworks, setArtworks] = useState([]);
+  const [subTotal, setsubTotal] = useState(0);
+
+  // useEffect(()=>
+  // {
+  //   let total=0;
+  //   console.log("artworks are " + JSON.stringify(artworks));
+  //   for(let i=0;i<artworks.length;i++)
+  //   {
+  //     total += parseFloat(artworks[i].price);
+  //   }
+  //   setsubTotal(total);
+  // }, [artworks]);
+  function getartworks() {
+    axios
+      .get("http://localhost:3001/getArtworksByUser", {
+        headers:
+        {
+          Authorization: localStorage.getItem('accessToken')
+        }
+      })
+      .then((response) => {
+        console.log("Responses are " + JSON.stringify(response.data));
+        setArtworks(response.data);
+        
+        console.log("we just set artworks and they are now " + JSON.stringify(artworks));
+        // window.location.reload(false);
+
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("error" + err);
+        }
+      });
+      
+  }
 
     const [cards, setCards] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
@@ -176,7 +216,15 @@ function Profile() {
   const handleEditCard = (index) => {
     setEditingIndex(index);
   };
+  useEffect(() => {
+    let ignore = false;
 
+    if (!ignore) getartworks();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
  
   return (
     <>    <Navbar expand="lg" className="bg-body-tertiary">
@@ -198,14 +246,17 @@ function Profile() {
   </Navbar>
   <BigDiver>
     <Container maxWidth="sm">
-    <StyledPaper elevation={3}>
-      <AccountCircleIcon sx={{ width: 120, height: 120, marginBottom: 2 }} />
-      <Typography variant="h4" component="h1" gutterBottom>
-        Welcome to Your Profile
-      </Typography>
-      <Typography variant="body1">Hello</Typography>
-      {/* Display more user information or relevant content */}
-    </StyledPaper>
+
+      <StyledPaper elevation={3}>
+        <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
+        <Typography variant="h4" component="h1" gutterBottom>
+          Welcome to Your Profile, {localStorage.getItem("username")}
+        </Typography>
+        <Typography variant="body1">
+Hello        </Typography>
+        {/* Display more user information or relevant content */}
+      </StyledPaper>
+
       <Spacer>
         
         <br></br>
@@ -221,122 +272,38 @@ function Profile() {
           >
             Add Art
           </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            href="#scrollToSection"
+
+            startIcon={<AddIcon />}
+            onClick={getartworks}
+          >
+            Load art
+          </Button>
         </CardContent>
       </Card>
       </Spacer>
     </Container>
-  <Padder>h</Padder>
-    <Spacer1 id="scrollToSection">
-    {cards.map((card, index) => (
-  <Card key={index} sx={{ maxWidth: 345 }}>
-    <CardHeader
-      avatar={
-        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-         <AccountCircleIcon/>
-        </Avatar>
-      }
-      action={
-        <IconButton aria-label="settings">
-          <MoreVertIcon />
-        </IconButton>
-      }
-      title={
-        editingIndex === index ? (
-          <TextField
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-          />
-        ) : (
-          card.title
-        )
-      }
- 
-      subheader={
-        editingIndex === index ? (
-          <TextField
-            value={editedSubheader}
-            onChange={(e) => setEditedSubheader(e.target.value)}
-          />
-        ) : (
-          card.subheader
-        )
-      }
-    />
-    <CardMedia
-      component="img"
-      height="194"
-      image={editingIndex === index ? editedImage : card.image}
-      alt={card.title}
-    />
-    {editingIndex === index && (
-      <input
-        type="text"
-        placeholder="Enter Image URL"
-        value={editedImage}
-        onChange={(e) => setEditedImage(e.target.value)}
-      />
-    )}
-    <CardContent>
-    <Typography variant="body2" color="text.secondary">
-        {editingIndex === index ? (
-          <TextField
-            multiline
-            value={editedPrice}
-            onChange={(e) => setEditedPrice(e.target.value)}
-          />
-        ) : (
-          card.price
-        )}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {editingIndex === index ? (
-          <TextField
-            multiline
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-          />
-        ) : (
-          card.content
-        )}
-      </Typography>
-    </CardContent>
-    <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
-        <FavoriteIcon />
-      </IconButton>
-      <IconButton aria-label="share">
-        <ShareIcon />
-      </IconButton>
-       <IconButton aria-label="remove" onClick={() => handleRemoveCard(index)}>
-        <DeleteIcon />
-      </IconButton>
-    
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={() => handleToggleEdit(index)}
-      >
-        {editingIndex === index ? 'Save' : 'Edit'}
-      </Button>
-      {editingIndex === index && (
-        <IconButton aria-label="show more" onClick={() => handleSaveCard(index)}>
-          <SaveIcon />
-        </IconButton>
-      )}
-    </CardActions>
-  </Card>
-))}
 
-<ScrollToTopButton
-        className={showScrollButton ? 'active' : ''}
-        onClick={scrollToTop}
-      >
-          <ArrowUpwardIcon />
-      </ScrollToTopButton>
+{/* <Padder>h</Padder> */}
+<ul className='flexcontainer' >
+<ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
+{artworks? artworks.map((data, index) => {
+          return (
+            <ArtworkCard
+              imgURL={data.imgurl}
+              title={data.title}
+              price={data.price}
+              key={index}
+              description={data.description}
+              date={data.date_created}
+            />
+          );
+        }): null}
+        </ul>
 
-
-
-</Spacer1>
 
 
 

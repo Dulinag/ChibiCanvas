@@ -109,6 +109,11 @@ const addToCart = async (req: any, res: any) =>
 
   const userCart = await pool.query(queries.checkCart, [username, productID]);
   console.log('userCart is ' + JSON.stringify(userCart.rows));
+  if(userCart.rowCount > 0)
+  {
+    pool.query(queries.updateCart,  [`${username}`, `${productID}`, `${quantity}`]);
+    return res.status(201).send("Successfully updated quantity in cart");
+  }
     // need to add checks to see if the user is trying to add more than the quantity of the product the owner has
     // need checks for if the user is trying to add an item to their cart that they own
   pool.query(queries.addCart, [`${username}`, `${productID}`, `${quantity}`], (err: any, results: any)=>
@@ -122,7 +127,7 @@ const deleteFromCart = async (req: any, res:any) =>
 {
   let username = req.user.username;
   let productID = req.body.product_id;
-  let quantity = req.body.quantity;
+  let quantity = -1* req.body.quantity;
 
   const userCart = await pool.query(queries.checkCart, [username, productID]);
   if(userCart.rowCount == 0)
@@ -154,6 +159,64 @@ const getArtworkSearch = async (req: any, res:any ) =>
   res.status(201).send(results.rows);
 }
 
+const addArtwork = async (req: any, res: any) =>
+{
+    let title = req.body.title;
+    let price = req.body.price;
+    let description = req.body.description;
+    let imgURL = req.body.imgURL;
+    // let dateCreated = req.body.date_created;
+    let owner = req.user.username;
+    console.log("owner is " + owner);
+    let artist_name = owner;
+    let quantity = 1;
+    pool.query(queries.addArtwork, [title, price, description, imgURL, owner, artist_name, quantity])
+    .then(()=>{
+        console.log("successfully added artwork!");
+        res.status(201).send("successfully added artwork!")})
+    .catch((err: any)=>{console.log("error " + err);res.status(404).send(err)})
+}
+
+const deleteArtwork = async (req: any, res:any) =>
+{
+    let product_id = req.body.product_id;
+    let username = req.user.username;
+    pool.query(queries.deleteArtwork, [username, product_id]).then(
+        ()=>
+        {
+            // bug: it runs section this even though the product_id doesnt exist
+            console.log("successfuly deleted artowrk!");
+            return res.status(201).send("successfuly deleted artowrk!");
+        }
+    ).catch((err: any)=>
+    {
+        return res.status(404).send(err);
+    })
+}
+const getCart = async (req: any, res: any) =>
+{
+  let username = req.user.username;
+  const results = await pool.query(queries.getCartQuery, [username]);
+  let artworkArr = [];
+  for(let product_id = 0;product_id<results.rowCount;product_id++)
+  {
+    //not getting quantity from this
+    let result = await pool.query(queries.getArtworkByID, [results.rows[product_id].product_id]);
+    artworkArr.push(result.rows[0])
+  }
+  console.log("artworkArr" + JSON.stringify(artworkArr));
+  res.json(artworkArr);
+
+}
+
+const getArtworkUser = async(req: any, res: any)=>
+{
+    let username = req.user.username;
+    const artworks = await pool.query(queries.getArtworkByUser, [username]);
+    return res.json(artworks.rows);
+}
+
+
 export default {
     getArtworks,
     loginUser,
@@ -162,5 +225,9 @@ export default {
     addToCart,
     deleteFromCart,
     getArtwork,
-    getArtworkSearch
+    getArtworkSearch,
+    addArtwork,
+    deleteArtwork,
+    getCart,
+    getArtworkUser
 }
