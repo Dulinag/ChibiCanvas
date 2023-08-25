@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -113,7 +113,22 @@ function Home() {
   const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [isValidationError, setIsValidationError] = useState(false);
+  const [artworks, setArtworks] = useState([]);
 
+
+  function getArtworks() {
+    axios
+      .get("http://localhost:3001/artworks")
+      .then((response) => {
+        console.log("Responses are " + JSON.stringify(response.data));
+        setArtworks(response.data);
+      })
+      .catch((err) => {
+        if (err) {
+          console.log("error" + err);
+        }
+      });
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -231,7 +246,15 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   height: theme.spacing(12),
   marginBottom: theme.spacing(2),
 }));
+useEffect(() => {
+  let ignore = false;
 
+  if (!ignore) getArtworks();
+
+  return () => {
+    ignore = true;
+  };
+}, []);
 
   return (
 
@@ -357,7 +380,17 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
         
      
 <ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
-    
+{artworks? artworks.map((data, index) => {
+          return (
+            <ArtworkCard
+              imgURL={data.imgurl}
+              title={data.title}
+              price={data.price}
+              key={index}
+              description={data.description}
+            />
+          );
+        }): null}
     </BigDiver>
     </div>
     </>
