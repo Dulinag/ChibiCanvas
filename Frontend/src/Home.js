@@ -400,22 +400,25 @@ useEffect(() => {
       title: "Paella",
       price: "$50",
       date: "Aug 2023",
-      imgURL: "https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg",
+      image: "https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg",
       description: "This is an impressive paella"
     }}
   />
-  {artworks.map((data, index) => (
+  {artworks.map((data, index) => {
+    return (
     <NormalCard
       key={index}
       card={{
         title: data.title,
         price: data.price,
         date: data.date_created,
-        imgURL: data.imgurl,
+        image: data.imgurl,
         description: data.description
       }}
     />
-  ))}
+  )})}
+    
+
 </ul>
     </BigDiver>
     </div>
