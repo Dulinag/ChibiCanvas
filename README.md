@@ -15,7 +15,7 @@ ACCESS_TOKEN_SECRET = jojssdfsdfmakeupasecretkeyjojssdfsdfmakeupasecretkeyjojssd
 
 REFRESH_TOKEN_SECRET = jojssdfsdfmakeupasecretkeyjojssdfsdfmakeupasecretkeyjojssdfsdfmakeupasecretkeyjojssdfsdfmakeupasecretkeyjojssdfsdfmakeupasecretk
 ```
-### Create a database called ChibiCanvasDB in PostgreSQL and run the Backend/createDB.sql script to initialize its tables
+### Create a database called ChibiCanvasDB in PostgreSQL and run the Backend/createDB.sql script to create its tables. Then run Backend/initTables.sql for some example data. 
 ### Make a file called credentials.json and place it inside Backend/src/
 ```
 {
