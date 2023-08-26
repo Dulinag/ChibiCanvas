@@ -94,6 +94,7 @@ justify-content: center;
 `;
 
 
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -392,6 +393,8 @@ useEffect(() => {
               </Button>
             </DialogActions>
           </Dialog>
+
+          <br></br>
         
     <ul className='flexcontainer' >
 <ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
