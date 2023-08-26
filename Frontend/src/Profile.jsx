@@ -25,6 +25,7 @@ import ProfileArtworks from './ProfileArtworks';
 import axios from "axios";
 import ArtworkCard from './ArtworkCard';
 import image3 from "./images/edit.png"
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const BigDiver = styled1.div`
   background-color: black;
@@ -59,6 +60,24 @@ height: 600px;
 `;
 
 
+const ScrollUpButton = styled1.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background-color: gray;
+  border-radius: 50%;
+  display: ${props => (props.show ? 'flex' : 'none')};
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: white;
+  }
+`;
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   display: 'flex',
@@ -124,7 +143,7 @@ function Profile() {
     const [editedContent, setEditedContent] = useState('');
     const [editedImage, setEditedImage] = useState('');
     const [editedPrice, setEditedPrice] = useState('');
-
+    const [showScroll, setShowScroll] = useState(false);
   
     const handleToggleEdit = (index) => {
       if (editingIndex === index) {
@@ -173,6 +192,25 @@ function Profile() {
 
     return () => {
       ignore = true;
+    };
+  }, []);
+
+  const checkScrollTop = () => {
+    if (!showScroll && window.pageYOffset > 400) {
+      setShowScroll(true);
+    } else if (showScroll && window.pageYOffset <= 400) {
+      setShowScroll(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', checkScrollTop);
+    return () => {
+      window.removeEventListener('scroll', checkScrollTop);
     };
   }, []);
  
@@ -256,7 +294,14 @@ Hello        </Typography>
           />
         ))}
       </Spacer1>
+
+      <ScrollUpButton onClick={scrollToTop} style={{ display: showScroll ? 'flex' : 'none' }}>
+      <ArrowUpwardIcon />
+    </ScrollUpButton>
+
+
       </BigDiver>
+      
     
     </>
   );
