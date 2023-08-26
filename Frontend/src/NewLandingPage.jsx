@@ -111,8 +111,8 @@ function CartPage() {
 
           {Artworks? Artworks.map((data, index) => {
           return (
-            <ArtworkCard
-              imgURL={data.imgurl}
+            <ArtworkCard card={{image: data.imgurl, title: data.title, price:data.price, content: data.description, subheader: data.date_created}}
+              image={data.imgurl}
               title={data.title}
               price={data.price}
               key={index}
