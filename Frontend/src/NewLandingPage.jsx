@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import styled from 'styled-components';
-import ArtworkCard from './ArtworkCard';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import styled from "styled-components";
+import ArtworkCard from "./ArtworkCard";
+import axios from "axios";
 
 const BigDiver = styled.div`
-  background-color: black;
+  background-color: white;
   padding-bottom: 40%;
   padding-top: 5%;
-  color: white;
+  color: black;
 `;
 
 const CartItem = styled.div`
@@ -19,8 +19,8 @@ const CartItem = styled.div`
 `;
 
 const CheckoutButton = styled.button`
-  background-color: #f0c14b;
-  border: 1px solid #a88734;
+  background-color: white;
+  border: 1px solid black;
   border-radius: 3px;
   color: #111;
   padding: 10px 20px;
@@ -29,8 +29,9 @@ const CheckoutButton = styled.button`
   transition: background-color 0.3s, border-color 0.3s;
 
   &:hover {
-    background-color: #ff9900;
-    border-color: #9c7e31;
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
   }
 `;
 
@@ -46,12 +47,10 @@ function CartPage() {
       ignore = true;
     };
   }, []);
-  useEffect(()=>
-  {
-    let total=0;
+  useEffect(() => {
+    let total = 0;
     console.log("Artworks are " + JSON.stringify(Artworks));
-    for(let i=0;i<Artworks.length;i++)
-    {
+    for (let i = 0; i < Artworks.length; i++) {
       total += parseFloat(Artworks[i].price);
     }
     setsubTotal(total);
@@ -59,18 +58,18 @@ function CartPage() {
   function getArtworks() {
     axios
       .get("http://localhost:3001/cart", {
-        headers:
-        {
-          Authorization: localStorage.getItem('accessToken')
-        }
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
       })
       .then((response) => {
         console.log("Responses are " + JSON.stringify(response.data));
         setArtworks(response.data);
-        
-        console.log("we just set artworks and they are now " + JSON.stringify(Artworks));
-        // window.location.reload(false);
 
+        console.log(
+          "we just set artworks and they are now " + JSON.stringify(Artworks)
+        );
+        // window.location.reload(false);
       })
       .catch((err) => {
         if (err) {
@@ -107,21 +106,22 @@ function CartPage() {
             </CartItem>
           ))} */}
           {/* <ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/> */}
-          <ul className='flexcontainer' >
-
-          {Artworks? Artworks.map((data, index) => {
-          return (
-            <ArtworkCard
-              imgURL={data.imgurl}
-              title={data.title}
-              price={data.price}
-              key={index}
-              description={data.description}
-              date={data.date_created}
-            />
-          );
-        }): null}
-        </ul>
+          <ul className="flexcontainer">
+            {Artworks
+              ? Artworks.map((data, index) => {
+                  return (
+                    <ArtworkCard
+                      imgURL={data.imgurl}
+                      title={data.title}
+                      price={data.price}
+                      key={index}
+                      description={data.description}
+                      date={data.date_created}
+                    />
+                  );
+                })
+              : null}
+          </ul>
           <p>Total: ${subTotal}</p>
           <CheckoutButton>Proceed to Checkout</CheckoutButton>
         </Container>

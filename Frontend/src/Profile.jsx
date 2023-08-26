@@ -1,39 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import {Paper, Avatar } from '@mui/material';
-import { Card, CardActions, CardContent, Button, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'; 
-import 'bootstrap/dist/css/bootstrap.css';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import styled1 from 'styled-components';
-import AddIcon from '@mui/icons-material/Add'; // Import the AddIcon component
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import SaveIcon from '@mui/icons-material/Save'; // Import the SaveIcon component
-import { red } from '@mui/material/colors';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import image3 from "./images/edit.png"
-
+import React, { useState, useEffect } from "react";
+import { Paper, Avatar } from "@mui/material";
 import {
+  Card,
+  CardActions,
+  CardContent,
+  Button,
+  Typography,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import styled1 from "styled-components";
+import AddIcon from "@mui/icons-material/Add"; // Import the AddIcon component
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import SaveIcon from "@mui/icons-material/Save"; // Import the SaveIcon component
+import { red } from "@mui/material/colors";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import image3 from "./images/edit.png";
 
-    CardHeader,
-    CardMedia,
-    IconButton,
-    TextField,
-  } from '@mui/material';
+import { CardHeader, CardMedia, IconButton, TextField } from "@mui/material";
 
-import image2 from './images/Sanji_and_Zeff_Cooking.webp'
-import ProfileArtworks from './ProfileArtworks';
+import image2 from "./images/Sanji_and_Zeff_Cooking.webp";
+import ProfileArtworks from "./ProfileArtworks";
 import axios from "axios";
-import ArtworkCard from './ArtworkCard';
-
+import ArtworkCard from "./ArtworkCard";
 
 const BigDiver = styled1.div`
-  background-color: black;
+  background-color: white;
   padding-bottom: 20%;
   padding-top: 5%;
   color: white;
@@ -85,12 +84,11 @@ const ScrollToTopButton = styled1.button`
   }
 `;
 
-
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
 }));
 
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
@@ -116,54 +114,52 @@ function Profile() {
   function getartworks() {
     axios
       .get("http://localhost:3001/getArtworksByUser", {
-        headers:
-        {
-          Authorization: localStorage.getItem('accessToken')
-        }
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
       })
       .then((response) => {
         console.log("Responses are " + JSON.stringify(response.data));
         setArtworks(response.data);
-        
-        console.log("we just set artworks and they are now " + JSON.stringify(artworks));
-        // window.location.reload(false);
 
+        console.log(
+          "we just set artworks and they are now " + JSON.stringify(artworks)
+        );
+        // window.location.reload(false);
       })
       .catch((err) => {
         if (err) {
           console.log("error" + err);
         }
       });
-      
   }
 
-    const [cards, setCards] = useState([]);
-    const [editingIndex, setEditingIndex] = useState(null);
-    const [editedTitle, setEditedTitle] = useState('');
-    const [editedSubheader, setEditedSubheader] = useState('');
-    const [editedContent, setEditedContent] = useState('');
-    const [editedImage, setEditedImage] = useState('');
-    const [editedPrice, setEditedPrice] = useState('');
+  const [cards, setCards] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedSubheader, setEditedSubheader] = useState("");
+  const [editedContent, setEditedContent] = useState("");
+  const [editedImage, setEditedImage] = useState("");
+  const [editedPrice, setEditedPrice] = useState("");
 
-  
-    const handleToggleEdit = (index) => {
-      if (editingIndex === index) {
-        handleSaveCard(index);
-      } else {
-        setEditingIndex(index);
-        setEditedTitle(cards[index].title);
-        setEditedSubheader(cards[index].subheader);
-        setEditedContent(cards[index].content);
-        setEditedPrice(cards[index].price);
-      }
-    };
+  const handleToggleEdit = (index) => {
+    if (editingIndex === index) {
+      handleSaveCard(index);
+    } else {
+      setEditingIndex(index);
+      setEditedTitle(cards[index].title);
+      setEditedSubheader(cards[index].subheader);
+      setEditedContent(cards[index].content);
+      setEditedPrice(cards[index].price);
+    }
+  };
 
-    const [showScrollButton, setShowScrollButton] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -176,42 +172,43 @@ function Profile() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  
-    const handleSaveCard = (index) => {
-        const updatedCards = [...cards];
-        updatedCards[index].title = editedTitle;
-        updatedCards[index].subheader = editedSubheader;
-        updatedCards[index].price = editedPrice;
 
-        updatedCards[index].content = editedContent;
-        updatedCards[index].image = editedImage; // Update the image URL
-      
-        setCards(updatedCards);
-        setEditingIndex(null);
-      };
-      
-      const handleRemoveCard = (index) => {
-        const updatedCards = [...cards];
-        updatedCards.splice(index, 1);
-        setCards(updatedCards);
-      };
-      
-    const handleAddCard = () => {
-        const newCard = {
-          title: "Title",
-          subheader: 'Date Made',
-          image: image3, // Use a placeholder image URL here,
-          price: '$--',
-          content: 'This impressive paella is a perfect party dish and a fun meal to cook together with your guests...',
-        };
-      
-        setCards([...cards, newCard]);
-      };
+  const handleSaveCard = (index) => {
+    const updatedCards = [...cards];
+    updatedCards[index].title = editedTitle;
+    updatedCards[index].subheader = editedSubheader;
+    updatedCards[index].price = editedPrice;
+
+    updatedCards[index].content = editedContent;
+    updatedCards[index].image = editedImage; // Update the image URL
+
+    setCards(updatedCards);
+    setEditingIndex(null);
+  };
+
+  const handleRemoveCard = (index) => {
+    const updatedCards = [...cards];
+    updatedCards.splice(index, 1);
+    setCards(updatedCards);
+  };
+
+  const handleAddCard = () => {
+    const newCard = {
+      title: "Title",
+      subheader: "Date Made",
+      image: image3, // Use a placeholder image URL here,
+      price: "$--",
+      content:
+        "This impressive paella is a perfect party dish and a fun meal to cook together with your guests...",
+    };
+
+    setCards([...cards, newCard]);
+  };
 
   const handleEditCard = (index) => {
     setEditingIndex(index);
@@ -225,92 +222,93 @@ function Profile() {
       ignore = true;
     };
   }, []);
- 
+
   return (
-    <>    <Navbar expand="lg" className="bg-body-tertiary">
-    <Container>
-      <Navbar.Brand href="/">Chibi Canvas</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="me-auto">
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/Profile">Profile</Nav.Link>
-          <Nav.Link href="/Contact">Contact</Nav.Link>
+    <>
+      {" "}
+      <Navbar expand="lg" className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand href="/">Chibi Canvas</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/Profile">Profile</Nav.Link>
+              <Nav.Link href="/Contact">Contact</Nav.Link>
 
-          <Nav.Link href="/ShoppingCart">          <ShoppingCartIcon /> </Nav.Link>
+              <Nav.Link href="/ShoppingCart">
+                {" "}
+                <ShoppingCartIcon />{" "}
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <BigDiver>
+        <Container maxWidth="sm">
+          <StyledPaper elevation={3}>
+            <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
+            <Typography variant="h4" component="h1" gutterBottom>
+              Welcome to Your Profile, {localStorage.getItem("username")}
+            </Typography>
+            <Typography variant="body1">Hello </Typography>
+            {/* Display more user information or relevant content */}
+          </StyledPaper>
 
-        
-        </Nav>
-      </Navbar.Collapse>
-    </Container>
-  </Navbar>
-  <BigDiver>
-    <Container maxWidth="sm">
+          <Spacer>
+            <br></br>
+            <Card>
+              <CardContent>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  href="#scrollToSection"
+                  startIcon={<AddIcon />}
+                  onClick={handleAddCard}
+                >
+                  Add Art
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  href="#scrollToSection"
+                  startIcon={<AddIcon />}
+                  onClick={getartworks}
+                >
+                  Load art
+                </Button>
+              </CardContent>
+            </Card>
+          </Spacer>
+        </Container>
 
-      <StyledPaper elevation={3}>
-        <ProfileAvatar src="/path/to/avatar.png" alt="User Avatar" />
-        <Typography variant="h4" component="h1" gutterBottom>
-          Welcome to Your Profile, {localStorage.getItem("username")}
-        </Typography>
-        <Typography variant="body1">
-Hello        </Typography>
-        {/* Display more user information or relevant content */}
-      </StyledPaper>
+        {/* <Padder>h</Padder> */}
 
-      <Spacer>
-        
         <br></br>
-<Card>
-        <CardContent>
-          <Button
-            variant="outlined"
-            color="primary"
-            href="#scrollToSection"
-
-            startIcon={<AddIcon />}
-            onClick={handleAddCard}
-          >
-            Add Art
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            href="#scrollToSection"
-
-            startIcon={<AddIcon />}
-            onClick={getartworks}
-          >
-            Load art
-          </Button>
-        </CardContent>
-      </Card>
-      </Spacer>
-    </Container>
-
-{/* <Padder>h</Padder> */}
-
-<br></br>
-<ul className='flexcontainer' >
-<ArtworkCard title="Paella" price="$50" date="Aug 2023" imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg" description="This is an impressive paella"/>
-{artworks? artworks.map((data, index) => {
-          return (
-            <ArtworkCard
-              imgURL={data.imgurl}
-              title={data.title}
-              price={data.price}
-              key={index}
-              description={data.description}
-              date={data.date_created}
-            />
-          );
-        }): null}
+        <ul className="flexcontainer">
+          <ArtworkCard
+            title="Paella"
+            price="$50"
+            date="Aug 2023"
+            imgURL="https://st2.depositphotos.com/1868949/8012/i/450/depositphotos_80126386-stock-photo-spanish-paella-with-seafood.jpg"
+            description="This is an impressive paella"
+          />
+          {artworks
+            ? artworks.map((data, index) => {
+                return (
+                  <ArtworkCard
+                    imgURL={data.imgurl}
+                    title={data.title}
+                    price={data.price}
+                    key={index}
+                    description={data.description}
+                    date={data.date_created}
+                  />
+                );
+              })
+            : null}
         </ul>
-
-
-
-
-    </BigDiver>
-    
+      </BigDiver>
     </>
   );
 }
